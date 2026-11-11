@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="icon" type="image/x-icon" href="/views/favicon.ico">
+
+    <!-- Basic Meta Tags -->
+    <meta name="description"
+        content="Transforme seus vídeos favoritos do YouTube em MP3 com facilidade e qualidade. Baixe suas músicas agora!">
+    <meta name="author" content="João Vittor Cesar">
+    <meta name="keywords" content="YouTube, MP3, Converter">
+    <meta name="theme-color" content="#111827" />
+
+    <!-- Open Graph Meta Tags (Facebook, LinkedIn) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://devangelzin.top/mp3vibe">
+    <meta property="og:title" content="MP3Vibe - Transforme Vídeos do YouTube em Músicas MP3">
+    <meta property="og:description"
+        content="Explore uma nova forma de baixar suas músicas favoritas do YouTube. Rápido, fácil e com qualidade superior.">
+
+    <!-- Twitter Meta Tags -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://devangelzin.top/mp3vibe">
+    <meta property="twitter:title" content="MP3Vibe - Transforme Vídeos do YouTube em Músicas MP3">
+    <meta property="twitter:description"
+        content="Explore uma nova forma de baixar suas músicas favoritas do YouTube. Rápido, fácil e com qualidade superior.">
+
+    <title>MP3Vibe - Transforme Vídeos do YouTube em Músicas MP3</title>
+</head>
+
+<body class="bg-gray-900 text-white font-sans flex flex-col items-center justify-center min-h-screen">
+
+    <header class="text-center py-10">
+        <h1 class="text-4xl font-bold mb-4">MP3Vibe</h1>
+        <p class="text-lg">Transforme Vídeos do YouTube em Músicas MP3</p>
+    </header>
+
+    <div class="container flex flex-col justify-center items-center">
+        <div id="loading" class="hidden">
+            <i class="fas fa-spinner animate-spin text-green-500 text-4xl mb-4"></i>
+        </div>
+
+        <!-- Mini card informativo -->
+        <div class="bg-yellow-500 text-white p-4 rounded-md mb-4" id="beta">
+            <p class="text-sm"><strong>Versão Beta:</strong> MP3Vibe está em desenvolvimento. Novos recursos em breve!
+            </p>
+        </div>
+
+        <div id="downloadForm" class="box-gerar w-96 text-center bg-gray-800 p-8 rounded-lg shadow-md">
+            <h3 class="text-red-500 text-center text-3xl mb-4">Baixe sua música gratuitamente agora!</h3>
+            <form action="/mp3vibe/download" method="get" onsubmit="showLoading()">
+                <label for="resultado" class="text-red-500 text-center text-sm mb-2">Cole o URL do YouTube
+                    abaixo:</label>
+                <input type="text" name="resultado" id="resultado"
+                    placeholder="Ex: https://www.youtube.com/watch?v=12345678"
+                    class="outline-none border-2 border-solid bg-white text-gray-800 rounded-md p-4 w-full mb-4 focus:ring-2 focus:ring-green-500">
+                <label for="format" class="text-red-500 text-center text-sm mb-2">Escolha o Formato</label>
+                <select name="format" id="format"
+                    class="outline-none border-2 border-solid bg-white text-gray-800 rounded-md p-2 w-full mb-4 focus:ring-2 focus:ring-green-500"
+                    onchange="toggleQualitySelection()">
+                    <option value="mp3">MP3</option>
+                    <option value="mp4">MP4</option>
+                </select>
+
+                <div id="audioQualitySelection" style="display: none;">
+                    <h6 class="text-red-500 text-center text-sm mb-2">Escolha a Qualidade do Áudio</h6>
+                    <select name="qualityAudio" id="audioQuality"
+                        class="outline-none border-2 border-solid bg-white text-gray-800 rounded-md p-2 w-full mb-4 focus:ring-2 focus:ring-green-500">
+                        <option value="highestaudio">320 kbps</option>
+                        <option value="140">256 kbps</option>
+                        <option value="128">192 kbps</option>
+                        <option value="128">128 kbps</option>
+                        <option value="lowestaudio">64 kbps</option>
+                    </select>
+                </div>
+
+                <div id="videoQualitySelection" style="display: none;">
+                    <h6 class="text-red-500 text-center text-sm mb-2">Escolha a Qualidade do Vídeo</h6>
+                    <select name="qualityVideo" id="videoQuality"
+                        class="outline-none border-2 border-solid bg-white text-gray-800 rounded-md p-2 w-full mb-4 focus:ring-2 focus:ring-green-500">
+                        <option value="1080p">1080p</option>
+                        <option value="720p">720p</option>
+                        <option value="480p">480p</option>
+                    </select>
+                </div>
+
+                <button type="submit"
+                    class="text-white bg-green-500 rounded-md outline-none p-4 block w-full text-center mb-4 hover:bg-green-600 focus:ring-2 focus:ring-green-500">
+                    <i class="fas fa-download"></i> Baixar Música
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="text-center mt-8 mb-4">
+        <p class="text-gray-500">&copy; 2024 João Vittor Cesar. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/e589c67cd7.js" crossorigin="anonymous"></script>
+
+    <script>
+        function toggleQualitySelection() {
+            const formatSelect = document.getElementById('format');
+            const audioQualitySelection = document.getElementById('audioQualitySelection');
+            const videoQualitySelection = document.getElementById('videoQualitySelection');
+
+            if (formatSelect.value === 'mp3') {
+                audioQualitySelection.style.display = 'block';
+                videoQualitySelection.style.display = 'none';
+            } else if (formatSelect.value === 'mp4') {
+                audioQualitySelection.style.display = 'none';
+                videoQualitySelection.style.display = 'block';
+            } else {
+                audioQualitySelection.style.display = 'none';
+                videoQualitySelection.style.display = 'none';
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('downloadForm').classList.add('hidden');
+        }
+
+        document.getElementById('downloadForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            showLoading();
+
+            const format = document.getElementById('format').value;
+            const audioQuality = format === 'mp3' ? document.getElementById('audioQuality').value : '';
+            const videoQuality = format === 'mp4' ? document.getElementById('videoQuality').value : '';
+            const downloadUrl = `/mp3vibe/download?resultado=${encodeURIComponent(document.getElementById('resultado').value)}&format=${format}&qualityAudio=${audioQuality}&qualityVideo=${videoQuality}`;
+
+            window.location.href = downloadUrl;
+
+            setTimeout(function () {
+                window.location.href = '/mp3vibe/';
+            }, 1500);
+        });
+
+        toggleQualitySelection();
+    </script>
+
+</body>
+
+</html>
